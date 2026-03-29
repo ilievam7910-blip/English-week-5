@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 — FAME | Interactive Vocabulary Activities</title>
+<style>
+  :root {
+    --navy: #1E3A5F;
+    --teal: #0D7377;
+    --teal2: #14A085;
+    --gold: #D4A017;
+    --gold2: #F0C040;
+    --white: #FFFFFF;
+    --light: #F4F6F9;
+    --silver: #E8EDF3;
+    --red: #C0392B;
+    --green: #1A7A4A;
+    --correct: #d4edda;
+    --wrong: #f8d7da;
+    --correctBorder: #1A7A4A;
+    --wrongBorder: #C0392B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f4f8;
+    color: #222;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 100%);
+    color: white;
+    padding: 2rem 2rem 1.5rem;
+    text-align: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+  }
+  .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.3rem; }
+  .hero p { font-size: 1.05rem; opacity: 0.88; margin-bottom: 1rem; }
+
+  /* NAV TABS */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 1.2rem 1rem 0;
+    background: var(--navy);
+  }
+  .tab-btn {
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.25); }
+  .tab-btn.active {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 2rem 1.5rem; max-width: 960px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  /* SCORE BAR */
+  .score-bar {
+    background: var(--navy);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+  }
+  .score-bar strong { font-size: 1.3rem; color: var(--gold2); }
+
+  /* CARDS GRID */
+  .grid { display: grid; gap: 12px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  /* VOCABULARY CARD */
+  .vocab-card {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 4px solid var(--teal);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .vocab-card .eng { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+  .vocab-card .pron { font-size: 0.85rem; color: #888; font-style: italic; }
+  .vocab-card .bg { font-size: 0.95rem; color: var(--teal); }
+  .vocab-card .example { font-size: 0.85rem; color: #666; margin-top: 4px; border-top: 1px solid #eee; padding-top: 4px; }
+  .speak-btn {
+    background: none;
+    border: 1px solid var(--teal);
+    color: var(--teal);
+    padding: 3px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    align-self: flex-start;
+    margin-top: 4px;
+    transition: all 0.2s;
+  }
+  .speak-btn:hover { background: var(--teal); color: white; }
+
+  /* EXERCISE COMMON */
+  .exercise-box {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 1.2rem;
+  }
+  .exercise-box h3 {
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-top: 10px;
+    display: none;
+    font-size: 0.95rem;
+  }
+  .feedback.correct { background: var(--correct); color: var(--green); border: 1px solid var(--correctBorder); display: block; }
+  .feedback.wrong { background: var(--wrong); color: var(--red); border: 1px solid var(--wrongBorder); display: block; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-primary:hover { background: var(--teal); }
+  .btn-gold { background: var(--gold); color: var(--navy); }
+  .btn-gold:hover { background: var(--gold2); }
+  .btn-teal { background: var(--teal); color: white; }
+  .btn-teal:hover { background: var(--teal2); }
+  .btn-sm { padding: 6px 14px; font-size: 0.85rem; border-radius: 15px; }
+
+  /* MATCHING */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .match-col { display: flex; flex-direction: column; gap: 8px; }
+  .match-item {
+    background: var(--light);
+    border: 2px solid var(--silver);
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    text-align: center;
+    user-select: none;
+  }
+  .match-item:hover { border-color: var(--teal); background: #e8f5f5; }
+  .match-item.selected { border-color: var(--gold); background: #FFF8E1; font-weight: 700; }
+  .match-item.matched-correct { border-color: var(--green); background: var(--correct); pointer-events: none; }
+  .match-item.matched-wrong { border-color: var(--red); background: var(--wrong); }
+
+  /* FILL IN THE BLANKS */
+  .sentence {
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 0.6rem;
+    color: #333;
+  }
+  .blank-input {
+    border: 2px solid var(--teal);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.95rem;
+    width: 160px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .blank-input:focus { border-color: var(--gold); }
+  .blank-input.correct-ans { border-color: var(--green); background: var(--correct); }
+  .blank-input.wrong-ans { border-color: var(--red); background: var(--wrong); }
+
+  /* WORD SEARCH */
+  .word-search-grid {
+    display: inline-grid;
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+    user-select: none;
+  }
+  .ws-cell {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: white;
+    border: 1px solid #e0e0e0;
+    transition: background 0.15s;
+    text-transform: uppercase;
+  }
+  .ws-cell:hover { background: #e8f5f5; }
+  .ws-cell.selecting { background: #FFF8E1; }
+  .ws-cell.found { background: var(--teal); color: white; }
+  .word-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem; }
+  .word-tag {
+    padding: 5px 12px;
+    border-radius: 15px;
+    background: var(--light);
+    border: 1px solid var(--silver);
+    font-size: 0.9rem;
+  }
+  .word-tag.found-word { background: var(--teal); color: white; border-color: var(--teal); text-decoration: line-through; }
+
+  /* CHOICE BUTTONS */
+  .choice-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid var(--silver);
+    background: var(--light);
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .choice-btn:hover:not(:disabled) { border-color: var(--teal); background: #e8f5f5; }
+  .choice-btn.correct-choice { border-color: var(--green); background: var(--correct); color: var(--green); font-weight: 700; }
+  .choice-btn.wrong-choice { border-color: var(--red); background: var(--wrong); color: var(--red); }
+
+  /* FLASHCARD FLIP */
+  .flashcard-container { perspective: 1000px; margin: 0 auto; max-width: 520px; }
+  .flashcard {
+    width: 100%; height: 240px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    cursor: pointer;
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  .flashcard-front { background: var(--navy); color: white; }
+  .flashcard-back { background: white; color: var(--navy); transform: rotateY(180deg); border: 3px solid var(--teal); }
+  .flashcard-word { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .flashcard-pron { font-size: 1rem; color: var(--gold2); margin-bottom: 0.5rem; }
+  .flashcard-hint { font-size: 0.85rem; opacity: 0.7; }
+  .flashcard-bg { font-size: 1.8rem; font-weight: 700; color: var(--teal); margin-bottom: 0.5rem; }
+  .flashcard-example { font-size: 0.9rem; color: #555; text-align: center; font-style: italic; }
+  .fc-nav { display: flex; gap: 10px; justify-content: center; margin-top: 1rem; align-items: center; }
+  .fc-counter { font-size: 0.9rem; color: #666; min-width: 60px; text-align: center; }
+
+  /* SPEAKING */
+  .speaking-card {
+    background: linear-gradient(135deg, var(--navy), var(--teal));
+    color: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .speaking-card h3 { font-size: 1.2rem; margin-bottom: 1rem; opacity: 0.9; }
+  .speaking-card .prompt { font-size: 1.3rem; font-weight: 700; line-height: 1.5; margin-bottom: 1.2rem; }
+  .mic-btn {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: none; cursor: pointer;
+    font-size: 1.8rem;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(212,160,23,0.5);
+  }
+  .mic-btn:hover { transform: scale(1.1); }
+  .mic-btn.recording { background: var(--red); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.5)} 50%{box-shadow:0 0 0 15px rgba(192,57,43,0)} }
+  .tip-box {
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    text-align: left;
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+
+  /* WRITING */
+  .writing-box {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    margin-bottom: 1rem;
+  }
+  .writing-box h3 { font-size: 1.05rem; color: var(--navy); margin-bottom: 0.5rem; font-weight: 700; }
+  .writing-box p { font-size: 0.95rem; color: #555; margin-bottom: 1rem; line-height: 1.6; }
+  textarea {
+    width: 100%;
+    min-height: 130px;
+    border: 2px solid var(--silver);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: var(--teal); }
+  .word-counter { font-size: 0.82rem; color: #999; text-align: right; margin-top: 4px; }
+  .keyword-check {
+    margin-top: 10px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .keyword-tag {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    background: var(--light);
+    border: 1px solid var(--silver);
+    transition: all 0.3s;
+  }
+  .keyword-tag.used { background: var(--teal); color: white; border-color: var(--teal); }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 6px;
+    background: var(--silver);
+    border-radius: 3px;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal2));
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+
+  /* DISCOVER GAME */
+  .letter-grid {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .letter-tile {
+    width: 44px; height: 50px;
+    background: var(--navy);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    box-shadow: 0 3px 0 #0a1c35;
+  }
+  .letter-tile:hover { background: var(--teal); transform: translateY(-2px); }
+  .letter-tile.used { background: #ccc; box-shadow: none; cursor: default; transform: none; }
+  .letter-tile.correct-tile { background: var(--green); box-shadow: 0 3px 0 #0d4a2a; }
+  .answer-tiles {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    min-height: 60px;
+    border: 2px dashed var(--silver);
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 1rem;
+    align-items: center;
+  }
+  .answer-tile {
+    width: 44px; height: 50px;
+    background: var(--light);
+    border: 2px solid var(--silver);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    cursor: pointer;
+    color: var(--navy);
+    transition: all 0.2s;
+  }
+  .answer-tile:hover { border-color: var(--red); background: var(--wrong); }
+
+  /* RESPONSIVE */
+  @media(max-width:680px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .match-grid { grid-template-columns: 1fr; }
+    .ws-cell { width: 30px; height: 30px; font-size: 0.85rem; }
+  }
+
+  .hint-text { color: var(--gold); font-size: 0.85rem; margin-top: 4px; display: none; }
+  .show-hint { display: inline; }
+  .divider { height: 1px; background: var(--silver); margin: 1.5rem 0; }
+  
+  .result-banner {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--teal), var(--teal2));
+    color: white;
+    margin-top: 1.5rem;
+  }
+  .result-banner h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .result-banner p { opacity: 0.9; font-size: 1rem; }
+</style>
+</head>
+<body>
+
+<!-- HERO HEADER -->
+<div class="hero">
+  <div class="badge">Week 5 · Седмица 5</div>
+  <h1>⭐ FAME</h1>
+  <p>Successful & Inspiring People · Character Adjectives · Vocabulary in Context</p>
+  <p style="font-size:0.85rem;opacity:0.7">Разработен от: М. Б. Илиева · ВТУ „Св. св. Кирил и Методий" · 2025</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('reading')">📖 Reading</button>
+  <button class="tab-btn" onclick="showTab('vocabulary')">📚 Vocabulary</button>
+  <button class="tab-btn" onclick="showTab('flashcards')">🃏 Flash Cards</button>
+  <button class="tab-btn" onclick="showTab('matching')">🔗 Matching</button>
+  <button class="tab-btn" onclick="showTab('discover')">🔤 Discover</button>
+  <button class="tab-btn" onclick="showTab('fill')">✏️ Fill in</button>
+  <button class="tab-btn" onclick="showTab('wordsearch')">🔍 Word Search</button>
+  <button class="tab-btn" onclick="showTab('choice')">❓ Quiz</button>
+  <button class="tab-btn" onclick="showTab('speaking')">🎤 Speaking</button>
+  <button class="tab-btn" onclick="showTab('writing')">📝 Writing</button>
+</div>
+
+<!-- READING SECTION -->
+<div id="reading" class="section active">
+  <div class="section-title">📖 Reading - What Makes a Celebrity?</div>
+  <div class="section-subtitle">Read the text, then complete the tasks below</div>
+
+  <div style="max-width:760px;margin:1.5rem auto 0;background:#fff;border-radius:14px;padding:1.8rem 2rem;box-shadow:0 4px 18px rgba(0,0,0,0.1);line-height:1.85;font-size:1rem;color:#222;">
+    <h3 style="color:#1E3A5F;text-align:center;margin-bottom:1rem;">What Makes a Celebrity?</h3>
+    <p style="margin-bottom:1rem;">In today's world, fame can arrive overnight. Social media has created a new kind of celebrity - someone who becomes well-known not through years of hard work, but through a single viral video. Yet behind every truly <b style="color:#D4A017;">accomplished</b> public figure, there is usually a story of persistence and <b style="color:#D4A017;">passionate</b> dedication.</p>
+    <p style="margin-bottom:1rem;">What qualities do the most admired celebrities share? Audiences are drawn to people who seem <b style="color:#D4A017;">authentic</b> - those who are true to their values even when fame brings pressure to change. A <b style="color:#D4A017;">sincere</b> personality builds lasting recognition. Celebrities who appear artificial often fade quickly.</p>
+    <p style="margin-bottom:1rem;"><b style="color:#D4A017;">Ambitious</b> and <b style="color:#D4A017;">assertive</b> individuals tend to seek the spotlight, but it is the <b style="color:#D4A017;">empathetic</b> ones - those who use their platform to support others - who earn long-term respect. Many <b style="color:#D4A017;">resourceful</b> celebrities have turned their public image into a vehicle for charitable causes.</p>
+    <p>The most enduring celebrities are those who remain <b style="color:#D4A017;">broad-minded</b>, continue to grow, and never lose sight of who they were before the cameras found them.</p>
+  </div>
+
+  <!-- TASK 1 -->
+  <div style="max-width:760px;margin:2rem auto 0;background:#fff;border-radius:14px;padding:1.8rem 2rem;box-shadow:0 4px 18px rgba(0,0,0,0.08);">
+    <h3 style="color:#1E3A5F;margin-bottom:1rem;">Task 1 - True, False or Not Given</h3>
+    <div id="rdg_t1"></div>
+    <div style="margin-top:1rem;">
+      <button onclick="rdgCheck()" style="background:#1E3A5F;color:#fff;border:none;padding:0.7rem 1.8rem;border-radius:25px;cursor:pointer;font-size:1rem;font-weight:600;">Check</button>
+      <button onclick="rdgReset()" style="background:#888;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:25px;cursor:pointer;font-size:1rem;font-weight:600;margin-left:0.6rem;">Reset</button>
+    </div>
+    <div id="rdg_result" style="margin-top:1rem;font-weight:600;font-size:1rem;"></div>
+  </div>
+
+  <!-- TASK 2 -->
+  <div style="max-width:760px;margin:2rem auto 2rem;background:#fff;border-radius:14px;padding:1.8rem 2rem;box-shadow:0 4px 18px rgba(0,0,0,0.08);">
+    <h3 style="color:#1E3A5F;margin-bottom:0.5rem;">Task 2 - Choose the correct word</h3>
+    <p style="color:#888;font-size:0.9rem;margin-bottom:1rem;">Words: authentic, ambitious, empathetic, sincere, resourceful, persistent, accomplished, broad-minded</p>
+    <div id="rdg_t2"></div>
+    <div style="margin-top:1rem;">
+      <button onclick="rdgCheck2()" style="background:#0D7377;color:#fff;border:none;padding:0.7rem 1.8rem;border-radius:25px;cursor:pointer;font-size:1rem;font-weight:600;">Check</button>
+      <button onclick="rdgReset2()" style="background:#888;color:#fff;border:none;padding:0.7rem 1.4rem;border-radius:25px;cursor:pointer;font-size:1rem;font-weight:600;margin-left:0.6rem;">Reset</button>
+    </div>
+    <div id="rdg_result2" style="margin-top:1rem;font-weight:600;font-size:1rem;"></div>
+  </div>
+</div>
+
+<div id="vocabulary" class="section">
+  <div class="section-title">📚 Vocabulary Reference</div>
+  <div class="section-subtitle">All 30 key words for the FAME topic — click 🔊 to hear pronunciation</div>
+  <div class="grid grid-3" id="vocabGrid"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 2: FLASHCARDS
+════════════════════════════════════════════════════════ -->
+<div id="flashcards" class="section">
+  <div class="section-title">🃏 Flash Cards</div>
+  <div class="section-subtitle">Click the card to reveal the Bulgarian translation · Use arrows to navigate</div>
+
+  <div class="flashcard-container">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-front">
+        <div class="flashcard-word" id="fc-word">adaptable</div>
+        <div class="flashcard-pron" id="fc-pron">/əˈdæptəbl/</div>
+        <div class="flashcard-hint">👆 Click to reveal translation</div>
+        <button class="speak-btn" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4);color:white;margin-top:1rem;" onclick="event.stopPropagation();speakWord(document.getElementById('fc-word').textContent)">🔊 Listen</button>
+      </div>
+      <div class="flashcard-back">
+        <div class="flashcard-bg" id="fc-bg">адаптивен</div>
+        <div class="flashcard-example" id="fc-example">"She is very adaptable — she thrives in any situation."</div>
+        <button class="speak-btn" style="margin-top:1rem;" onclick="event.stopPropagation();speakWord(document.getElementById('fc-word').textContent)">🔊 Pronounce</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="btn btn-primary btn-sm" onclick="fcPrev()">← Prev</button>
+    <div class="fc-counter" id="fc-counter">1 / 30</div>
+    <button class="btn btn-primary btn-sm" onclick="fcNext()">Next →</button>
+    <button class="btn btn-gold btn-sm" onclick="shuffleCards()">🔀 Shuffle</button>
+  </div>
+
+  <div style="margin-top:2rem;text-align:center;color:#666;font-size:0.9rem;">
+    💡 Study tip: Go through all cards once, then try saying the Bulgarian word BEFORE flipping!
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 3: MATCHING
+════════════════════════════════════════════════════════ -->
+<div id="matching" class="section">
+  <div class="section-title">🔗 Matching Exercise</div>
+  <div class="section-subtitle">Match the English word with its Bulgarian translation · 10 pairs per round</div>
+
+  <div class="score-bar">
+    <span>Matched: <strong id="matchScore">0</strong> / <strong id="matchTotal">10</strong></span>
+    <button class="btn btn-gold btn-sm" onclick="initMatching()">🔄 New Round</button>
+  </div>
+
+  <div class="match-grid">
+    <div class="match-col" id="matchLeft"></div>
+    <div class="match-col" id="matchRight"></div>
+  </div>
+  <div class="feedback" id="matchFeedback"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 4: DISCOVER / UNSCRAMBLE
+════════════════════════════════════════════════════════ -->
+<div id="discover" class="section">
+  <div class="section-title">🔤 Discover the Word</div>
+  <div class="section-subtitle">Unscramble the letters to find the hidden vocabulary word</div>
+
+  <div class="score-bar">
+    <span>Score: <strong id="discoverScore">0</strong> / <strong id="discoverTotal">0</strong></span>
+    <button class="btn btn-gold btn-sm" onclick="nextDiscover()">➡ Next Word</button>
+  </div>
+
+  <div class="exercise-box">
+    <h3 id="discoverClue">Clue: <span id="discoverClueText"></span></h3>
+    <p style="margin-bottom:0.8rem;color:#666;font-size:0.9rem;">Arrange the letters in the correct order:</p>
+    <div class="letter-grid" id="letterGrid"></div>
+    <div class="answer-tiles" id="answerTiles"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="checkDiscover()">✓ Check</button>
+      <button class="btn btn-sm" style="background:var(--silver);color:var(--navy);" onclick="clearAnswer()">✗ Clear</button>
+      <button class="btn btn-sm" style="background:#eee;color:#666;" onclick="showDiscoverHint()">💡 Hint</button>
+    </div>
+    <div class="hint-text" id="discoverHint"></div>
+    <div class="feedback" id="discoverFeedback"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 5: FILL IN THE BLANKS
+════════════════════════════════════════════════════════ -->
+<div id="fill" class="section">
+  <div class="section-title">✏️ Fill in the Blanks</div>
+  <div class="section-subtitle">Complete each sentence with the correct vocabulary word</div>
+
+  <div class="score-bar">
+    <span>Correct: <strong id="fillScore">0</strong> / 8</span>
+    <button class="btn btn-gold btn-sm" onclick="checkFill()">✓ Check All</button>
+    <button class="btn btn-sm" style="background:var(--silver);color:var(--navy);" onclick="resetFill()">↺ Reset</button>
+  </div>
+
+  <div id="fillExercises"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 6: WORD SEARCH
+════════════════════════════════════════════════════════ -->
+<div id="wordsearch" class="section">
+  <div class="section-title">🔍 Word Search</div>
+  <div class="section-subtitle">Find 10 vocabulary words hidden in the grid · click & drag to select</div>
+
+  <div class="score-bar">
+    <span>Found: <strong id="wsScore">0</strong> / 10</span>
+    <button class="btn btn-gold btn-sm" onclick="initWordSearch()">🔄 New Game</button>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+    <div>
+      <div class="word-search-grid" id="wsGrid" style="grid-template-columns: repeat(15,38px)"></div>
+    </div>
+    <div>
+      <p style="font-weight:700;color:var(--navy);margin-bottom:0.5rem;">Find these words:</p>
+      <div class="word-list" id="wsWordList"></div>
+      <div class="feedback" id="wsFeedback" style="margin-top:1rem;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 7: MULTIPLE CHOICE QUIZ
+════════════════════════════════════════════════════════ -->
+<div id="choice" class="section">
+  <div class="section-title">❓ Vocabulary Quiz</div>
+  <div class="section-subtitle">Choose the correct meaning or word for each question</div>
+
+  <div class="score-bar">
+    <span>Score: <strong id="quizScore">0</strong> / <strong id="quizTotal">10</strong></span>
+    <button class="btn btn-gold btn-sm" onclick="initQuiz()">🔄 New Quiz</button>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="quizProgress" style="width:0%"></div></div>
+
+  <div id="quizContainer"></div>
+  <div id="quizResult" style="display:none"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 8: SPEAKING TASKS
+════════════════════════════════════════════════════════ -->
+<div id="speaking" class="section">
+  <div class="section-title">🎤 Speaking Tasks</div>
+  <div class="section-subtitle">Practice speaking — record yourself and compare with the model</div>
+
+  <div id="speakingTasks"></div>
+
+  <div class="exercise-box">
+    <h3>🔊 Pronunciation Practice</h3>
+    <p style="color:#666;margin-bottom:1rem;">Click any word to hear its pronunciation, then repeat it:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;" id="pronGrid"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 9: WRITING TASKS
+════════════════════════════════════════════════════════ -->
+<div id="writing" class="section">
+  <div class="section-title">📝 Writing Tasks</div>
+  <div class="section-subtitle">Use vocabulary words in context — keywords are tracked automatically</div>
+
+  <div id="writingTasks"></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════ -->
+<script>
+// -- VOCABULARY DATA ----------------------------------------------
+const vocab = [
+  { en:"adaptable",    pron:"/əˈdæptəbl/",      bg:"адаптивен",        ex:"She is adaptable  -  she thrives in any situation." },
+  { en:"ambitious",    pron:"/æmˈbɪʃəs/",        bg:"амбициозен",       ex:"He is ambitious and always sets high goals." },
+  { en:"compassionate",pron:"/kəmˈpæʃənət/",    bg:"състрадателен",    ex:"A compassionate leader cares about the team." },
+  { en:"courageous",   pron:"/kəˈreɪdʒəs/",      bg:"смел",             ex:"She was courageous enough to speak the truth." },
+  { en:"diligent",     pron:"/ˈdɪlɪdʒənt/",      bg:"прилежен",        ex:"A diligent student always prepares well." },
+  { en:"empathetic",   pron:"/ˌempəˈθetɪk/",     bg:"емпатичен",        ex:"An empathetic person understands others' feelings." },
+  { en:"frank",        pron:"/fræŋk/",            bg:"откровен",         ex:"He gave us a frank opinion about our work." },
+  { en:"generous",     pron:"/ˈdʒenərəs/",        bg:"щедър",            ex:"She was generous with her time and knowledge." },
+  { en:"gregarious",   pron:"/ɡrɪˈɡeɑːriəs/",   bg:"общителен",        ex:"A gregarious person enjoys social gatherings." },
+  { en:"impartial",    pron:"/ɪmˈpɑːʃl/",         bg:"безпристрастен",  ex:"A judge must be completely impartial." },
+  { en:"intuitive",    pron:"/ɪnˈtjuːɪtɪv/",      bg:"интуитивен",      ex:"She made an intuitive decision that proved right." },
+  { en:"inventive",    pron:"/ɪnˈventɪv/",        bg:"изобретателен",   ex:"An inventive mind finds creative solutions." },
+  { en:"passionate",   pron:"/ˈpæʃənət/",         bg:"страстен",         ex:"She is passionate about helping others." },
+  { en:"persistent",   pron:"/pəˈsɪstənt/",       bg:"упорит",           ex:"His persistent efforts finally paid off." },
+  { en:"practical",    pron:"/ˈpræktɪkl/",        bg:"практичен",        ex:"We need a practical solution, not theory." },
+  { en:"rational",     pron:"/ˈræʃənl/",          bg:"рационален",       ex:"She made a rational decision based on facts." },
+  { en:"reliable",     pron:"/rɪˈlaɪəbl/",         bg:"надежден",         ex:"A reliable person always keeps their promises." },
+  { en:"resourceful",  pron:"/rɪˈzɔːsfəl/",       bg:"находчив",         ex:"A resourceful teacher adapts to any situation." },
+  { en:"sensible",     pron:"/ˈsensɪbl/",          bg:"разумен",          ex:"It is sensible to prepare before speaking." },
+  { en:"sincere",      pron:"/sɪnˈsɪər/",          bg:"искрен",           ex:"Her sincere smile made everyone feel welcome." },
+  { en:"sympathetic",  pron:"/ˌsɪmpəˈθetɪk/",    bg:"съчувстващ",      ex:"He was sympathetic when she lost her job." },
+  { en:"witty",        pron:"/ˈwɪti/",             bg:"остроумен",        ex:"Her witty remarks always made the class laugh." },
+  { en:"accomplished", pron:"/əˈkʌmplɪʃt/",       bg:"постигнал много",  ex:"She is an accomplished musician and scientist." },
+  { en:"authentic",    pron:"/ɔːˈθentɪk/",         bg:"автентичен",       ex:"An authentic leader is true to their values." },
+  { en:"broad-minded", pron:"/ˌbrɔːdˈmaɪndɪd/",   bg:"широко скроен",   ex:"A broad-minded person accepts different views." },
+  { en:"astute",       pron:"/əˈstjuːt/",          bg:"проницателен",     ex:"An astute observer notices every detail." },
+  { en:"attentive",    pron:"/əˈtentɪv/",          bg:"внимателен",       ex:"Be attentive during lectures to learn more." },
+  { en:"assertive",    pron:"/əˈsɜːtɪv/",          bg:"напорист",         ex:"An assertive leader speaks up with confidence." },
+  { en:"amiable",      pron:"/ˈeɪmiəbl/",          bg:"любезен",          ex:"Her amiable nature made her popular with all." },
+  { en:"philosophical",pron:"/ˌfɪləˈsɒfɪkl/",     bg:"философски",       ex:"He took a philosophical approach to failure." },
+];
+
+// -- TAB NAVIGATION -----------------------------------------------
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// -- SPEECH SYNTHESIS ---------------------------------------------
+function speakWord(word, rate=0.85) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = 'en-GB'; u.rate = rate;
+  window.speechSynthesis.speak(u);
+}
+
+// -- VOCABULARY GRID ----------------------------------------------
+function buildVocabGrid() {
+  const grid = document.getElementById('vocabGrid');
+  grid.innerHTML = vocab.map(v => `
+    <div class="vocab-card">
+      <div class="eng">${v.en}</div>
+      <div class="pron">${v.pron}</div>
+      <div class="bg">${v.bg}</div>
+      <div class="example">"${v.ex}"</div>
+      <button class="speak-btn" onclick="speakWord('${v.en}')">🔊 Listen</button>
+    </div>
+  `).join('');
+}
+
+// -- FLASHCARDS ---------------------------------------------------
+let fcIndex = 0;
+let fcOrder = [...Array(vocab.length).keys()];
+let fcFlipped = false;
+
+function updateFlashcard() {
+  const v = vocab[fcOrder[fcIndex]];
+  document.getElementById('fc-word').textContent = v.en;
+  document.getElementById('fc-pron').textContent = v.pron;
+  document.getElementById('fc-bg').textContent = v.bg;
+  document.getElementById('fc-example').textContent = '"' + v.ex + '"';
+  document.getElementById('fc-counter').textContent = `${fcIndex+1} / ${vocab.length}`;
+  fcFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+function flipCard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+  fcFlipped = !fcFlipped;
+  if (fcFlipped) speakWord(vocab[fcOrder[fcIndex]].en);
+}
+function fcNext() { fcIndex = (fcIndex+1) % vocab.length; updateFlashcard(); }
+function fcPrev() { fcIndex = (fcIndex-1+vocab.length) % vocab.length; updateFlashcard(); }
+function shuffleCards() {
+  for (let i=fcOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcOrder[i],fcOrder[j]]=[fcOrder[j],fcOrder[i]];}
+  fcIndex=0; updateFlashcard();
+}
+
+// -- MATCHING -----------------------------------------------------
+let matchSelected = null;
+let matchPairs = [];
+let matchScore = 0;
+
+function initMatching() {
+  matchScore = 0; matchSelected = null;
+  document.getElementById('matchScore').textContent = 0;
+  document.getElementById('matchFeedback').className = 'feedback';
+  document.getElementById('matchFeedback').textContent = '';
+
+  const shuffled = [...vocab].sort(()=>Math.random()-0.5).slice(0,10);
+  matchPairs = shuffled;
+  document.getElementById('matchTotal').textContent = 10;
+
+  const leftItems = shuffled.map((v,i)=>({id:i, text:v.en, type:'en'}));
+  const rightItems = [...shuffled].sort(()=>Math.random()-0.5).map((v,i)=>({
+    id: shuffled.indexOf(v), text:v.bg, type:'bg'
+  }));
+
+  const makeEl = (item) => {
+    const d = document.createElement('div');
+    d.className = 'match-item';
+    d.textContent = item.text;
+    d.dataset.id = item.id;
+    d.dataset.type = item.type;
+    d.onclick = () => handleMatch(d, item);
+    return d;
+  };
+
+  const lc = document.getElementById('matchLeft');
+  const rc = document.getElementById('matchRight');
+  lc.innerHTML=''; rc.innerHTML='';
+  leftItems.forEach(it => lc.appendChild(makeEl(it)));
+  rightItems.forEach(it => rc.appendChild(makeEl(it)));
+}
+
+function handleMatch(el, item) {
+  if (el.classList.contains('matched-correct')) return;
+  if (!matchSelected) {
+    matchSelected = {el, item};
+    el.classList.add('selected');
+    return;
+  }
+  if (matchSelected.el === el) { el.classList.remove('selected'); matchSelected=null; return; }
+  if (matchSelected.item.type === item.type) {
+    matchSelected.el.classList.remove('selected');
+    matchSelected = {el, item}; el.classList.add('selected'); return;
+  }
+  const isMatch = matchSelected.item.id == item.id;
+  const fb = document.getElementById('matchFeedback');
+  if (isMatch) {
+    matchSelected.el.classList.remove('selected');
+    matchSelected.el.classList.add('matched-correct');
+    el.classList.add('matched-correct');
+    matchScore++;
+    document.getElementById('matchScore').textContent = matchScore;
+    fb.className='feedback correct';
+    const w = matchPairs[item.id];
+    fb.textContent = `✓ Correct! "${w.en}" = "${w.bg}"  ${w.pron}`;
+    speakWord(w.en);
+    if (matchScore===10) {
+      setTimeout(()=>{fb.textContent='🎉 Perfect! All 10 matched! Click "New Round" for more.'},500);
+    }
+  } else {
+    matchSelected.el.classList.add('matched-wrong');
+    el.classList.add('matched-wrong');
+    fb.className='feedback wrong';
+    fb.textContent = `✗ Not a match. Try again!`;
+    setTimeout(()=>{
+      matchSelected.el.classList.remove('selected','matched-wrong');
+      el.classList.remove('selected','matched-wrong');
+      fb.className='feedback';
+    }, 900);
+  }
+  matchSelected = null;
+}
+
+// -- DISCOVER / UNSCRAMBLE ----------------------------------------
+let discoverList = [...vocab].sort(()=>Math.random()-0.5);
+let discoverIdx = 0;
+let discoverScore = 0;
+let discoverLetterMap = [];
+let discoverAnswer = [];
+
+function initDiscover() {
+  discoverList = [...vocab].sort(()=>Math.random()-0.5);
+  discoverIdx = 0; discoverScore = 0;
+  document.getElementById('discoverScore').textContent = 0;
+  document.getElementById('discoverTotal').textContent = 0;
+  loadDiscoverWord();
+}
+
+function loadDiscoverWord() {
+  if (discoverIdx >= discoverList.length) { initDiscover(); return; }
+  const v = discoverList[discoverIdx];
+  document.getElementById('discoverClueText').textContent = `"${v.bg}"  -  ${v.ex}`;
+  document.getElementById('discoverFeedback').className='feedback';
+  document.getElementById('discoverHint').style.display='none';
+
+  const letters = v.en.replace(/[- ]/g,'').toUpperCase().split('');
+  const scrambled = [...letters].sort(()=>Math.random()-0.5);
+  discoverLetterMap = scrambled.map((l,i)=>({letter:l, idx:i, used:false}));
+  discoverAnswer = [];
+  renderDiscoverLetters();
+}
+
+function renderDiscoverLetters() {
+  const grid = document.getElementById('letterGrid');
+  const ans = document.getElementById('answerTiles');
+  grid.innerHTML = discoverLetterMap.map((l,i)=>`
+    <div class="letter-tile${l.used?' used':''}" onclick="pickLetter(${i})">${l.letter}</div>
+  `).join('');
+  ans.innerHTML = discoverAnswer.map((l,i)=>`
+    <div class="answer-tile" onclick="returnLetter(${i})">${l.letter}</div>
+  `).join('');
+}
+
+function pickLetter(i) {
+  if (discoverLetterMap[i].used) return;
+  discoverLetterMap[i].used = true;
+  discoverAnswer.push({letter:discoverLetterMap[i].letter, srcIdx:i});
+  renderDiscoverLetters();
+}
+function returnLetter(i) {
+  const item = discoverAnswer.splice(i,1)[0];
+  discoverLetterMap[item.srcIdx].used = false;
+  renderDiscoverLetters();
+}
+function clearAnswer() { discoverAnswer=[]; discoverLetterMap.forEach(l=>l.used=false); renderDiscoverLetters(); }
+
+function checkDiscover() {
+  const target = discoverList[discoverIdx].en.replace(/[- ]/g,'').toUpperCase();
+  const answer = discoverAnswer.map(l=>l.letter).join('');
+  const fb = document.getElementById('discoverFeedback');
+  if (answer === target) {
+    discoverScore++;
+    discoverIdx++;
+    document.getElementById('discoverScore').textContent = discoverScore;
+    document.getElementById('discoverTotal').textContent = discoverIdx;
+    fb.className='feedback correct';
+    fb.textContent = `✓ Excellent! The word is "${discoverList[discoverIdx-1].en}"  -  ${discoverList[discoverIdx-1].bg}`;
+    speakWord(discoverList[discoverIdx-1].en);
+    setTimeout(()=>loadDiscoverWord(), 1800);
+  } else {
+    fb.className='feedback wrong';
+    fb.textContent = `✗ Not quite. Try rearranging the letters!`;
+  }
+}
+function showDiscoverHint() {
+  const v = discoverList[discoverIdx];
+  const hint = document.getElementById('discoverHint');
+  hint.style.display='block';
+  hint.className='hint-text show-hint';
+  hint.textContent = `💡 Hint: First letter is "${v.en[0].toUpperCase()}" · ${v.pron}`;
+}
+function nextDiscover() {
+  discoverIdx++;
+  if (discoverIdx >= discoverList.length) initDiscover();
+  else loadDiscoverWord();
+}
+
+// -- FILL IN THE BLANKS -------------------------------------------
+const fillSentences = [
+  { sentence:"She is very ___  -  she can work in any environment.", answer:"adaptable", hint:"adj. / адаптивен" },
+  { sentence:"An ___ student never gives up, no matter how hard it gets.", answer:"diligent", hint:"adj. / прилежен" },
+  { sentence:"He gave a ___ opinion: he told us exactly what he thought.", answer:"frank", hint:"adj. / откровен" },
+  { sentence:"A ___ teacher makes every student feel understood.", answer:"empathetic", hint:"adj. / емпатичен" },
+  { sentence:"Her ___ nature means she always helps others without expecting anything back.", answer:"generous", hint:"adj. / щедър" },
+  { sentence:"To be ___, you need to find creative solutions to unexpected problems.", answer:"resourceful", hint:"adj. / находчив" },
+  { sentence:"A ___ decision is based on evidence, not emotions.", answer:"rational", hint:"adj. / рационален" },
+  { sentence:"She is absolutely ___  -  you can always count on her.", answer:"reliable", hint:"adj. / надежден" },
+];
+
+function buildFill() {
+  const cont = document.getElementById('fillExercises');
+  cont.innerHTML = fillSentences.map((s,i)=>`
+    <div class="exercise-box">
+      <h3>Sentence ${i+1}</h3>
+      <div class="sentence">
+        ${s.sentence.replace('___',`<input class="blank-input" id="fill_${i}" placeholder="type here..." autocomplete="off">`)}
+      </div>
+      <div style="font-size:0.85rem;color:#888;margin-top:4px;">💡 ${s.hint}</div>
+      <div class="feedback" id="fill_fb_${i}"></div>
+    </div>
+  `).join('');
+
+  fillSentences.forEach((s,i)=>{
+    const inp = document.getElementById(`fill_${i}`);
+    inp.addEventListener('keydown', e => { if(e.key==='Enter') checkSingleFill(i); });
+  });
+}
+
+function checkSingleFill(i) {
+  const s = fillSentences[i];
+  const inp = document.getElementById(`fill_${i}`);
+  const val = inp.value.trim().toLowerCase();
+  const fb = document.getElementById(`fill_fb_${i}`);
+  if (val === s.answer) {
+    inp.classList.add('correct-ans'); inp.classList.remove('wrong-ans');
+    fb.className='feedback correct';
+    fb.textContent = `✓ Correct! "${s.answer}"  -  ${getVocabBg(s.answer)}`;
+    speakWord(s.answer);
+  } else {
+    inp.classList.add('wrong-ans'); inp.classList.remove('correct-ans');
+    fb.className='feedback wrong';
+    fb.textContent = `✗ Try again! (${s.hint})`;
+  }
+}
+
+function checkFill() {
+  let score = 0;
+  fillSentences.forEach((s,i)=>{
+    const inp = document.getElementById(`fill_${i}`);
+    const val = inp.value.trim().toLowerCase();
+    const fb = document.getElementById(`fill_fb_${i}`);
+    if (val === s.answer) {
+      inp.classList.add('correct-ans'); inp.classList.remove('wrong-ans');
+      fb.className='feedback correct';
+      fb.textContent = `✓ "${s.answer}"  -  ${getVocabBg(s.answer)}`;
+      score++;
+    } else if (val !== '') {
+      inp.classList.add('wrong-ans'); inp.classList.remove('correct-ans');
+      fb.className='feedback wrong';
+      fb.textContent = `✗ Answer: "${s.answer}"`;
+    }
+  });
+  document.getElementById('fillScore').textContent = score;
+}
+
+function resetFill() {
+  fillSentences.forEach((s,i)=>{
+    const inp = document.getElementById(`fill_${i}`);
+    inp.value=''; inp.classList.remove('correct-ans','wrong-ans');
+    const fb = document.getElementById(`fill_fb_${i}`);
+    fb.className='feedback'; fb.textContent='';
+  });
+  document.getElementById('fillScore').textContent = 0;
+}
+
+function getVocabBg(en) {
+  const v = vocab.find(w=>w.en===en);
+  return v ? v.bg : '';
+}
+
+// -- WORD SEARCH --------------------------------------------------
+const wsWords = ['ADAPTABLE','AMBITIOUS','COURAGEOUS','DILIGENT','FRANK','GENEROUS','PASSIONATE','RELIABLE','SINCERE','WITTY'];
+let wsGrid = [];
+let wsFound = [];
+let wsDragging = false;
+let wsStart = null;
+let wsSelecting = [];
+
+function initWordSearch() {
+  wsFound = []; wsGrid = [];
+  document.getElementById('wsScore').textContent = 0;
+  document.getElementById('wsFeedback').className='feedback';
+  const size = 15;
+  for (let r=0;r<size;r++) { wsGrid.push([]); for(let c=0;c<size;c++) wsGrid[r].push(''); }
+
+  const placed = [];
+  const dirs = [[0,1],[1,0],[0,-1],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+  wsWords.forEach(word => {
+    let ok = false;
+    for (let t=0;t<200&&!ok;t++) {
+      const dir = dirs[Math.floor(Math.random()*4)]; // horizontal/vertical only for clarity
+      const r = Math.floor(Math.random()*size);
+      const c = Math.floor(Math.random()*size);
+      if (r+dir[0]*(word.length-1)<0||r+dir[0]*(word.length-1)>=size) continue;
+      if (c+dir[1]*(word.length-1)<0||c+dir[1]*(word.length-1)>=size) continue;
+      let fits = true;
+      for (let i=0;i<word.length;i++) {
+        const cr=r+dir[0]*i, cc=c+dir[1]*i;
+        if (wsGrid[cr][cc]!=='' && wsGrid[cr][cc]!==word[i]) { fits=false; break; }
+      }
+      if (fits) {
+        for(let i=0;i<word.length;i++) wsGrid[r+dir[0]*i][c+dir[1]*i]=word[i];
+        placed.push(word);
+        ok=true;
+      }
+    }
+  });
+
+  const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<size;r++) for(let c=0;c<size;c++) if(!wsGrid[r][c]) wsGrid[r][c]=alpha[Math.floor(Math.random()*26)];
+
+  renderWordSearch(size);
+  renderWordList();
+}
+
+function renderWordSearch(size) {
+  const grid = document.getElementById('wsGrid');
+  grid.style.gridTemplateColumns=`repeat(${size},38px)`;
+  grid.innerHTML='';
+  for(let r=0;r<size;r++) for(let c=0;c<size;c++){
+    const cell=document.createElement('div');
+    cell.className='ws-cell';
+    cell.textContent=wsGrid[r][c];
+    cell.dataset.r=r; cell.dataset.c=c;
+    cell.addEventListener('mousedown',()=>{ wsDragging=true; wsStart={r,c}; wsSelecting=[]; highlightSelect(r,c); });
+    cell.addEventListener('mouseover',()=>{ if(wsDragging) highlightSelect(r,c); });
+    cell.addEventListener('mouseup',()=>{ if(wsDragging){ wsDragging=false; checkWSSelection(r,c); }});
+    cell.addEventListener('touchstart',e=>{ e.preventDefault(); wsDragging=true; wsStart={r,c}; wsSelecting=[]; highlightSelect(r,c); },{passive:false});
+    cell.addEventListener('touchend',e=>{ e.preventDefault(); wsDragging=false; checkWSSelection(r,c); },{passive:false});
+    grid.appendChild(cell);
+  }
+}
+
+function getCells() { return document.querySelectorAll('.ws-cell'); }
+function cellAt(r,c) { return document.querySelector(`.ws-cell[data-r="${r}"][data-c="${c}"]`); }
+
+function highlightSelect(er,ec) {
+  getCells().forEach(cell=>{ if(!cell.classList.contains('found')) cell.classList.remove('selecting'); });
+  if (!wsStart) return;
+  const dr=er-wsStart.r, dc=ec-wsStart.c;
+  wsSelecting=[];
+  if(dr===0) { const s=Math.sign(dc)||1; for(let c=wsStart.c;c!==ec+s;c+=s){ wsSelecting.push({r:wsStart.r,c}); } }
+  else if(dc===0) { const s=Math.sign(dr)||1; for(let r=wsStart.r;r!==er+s;r+=s){ wsSelecting.push({r,c:wsStart.c}); } }
+  else if(Math.abs(dr)===Math.abs(dc)) { const sr=Math.sign(dr),sc=Math.sign(dc); for(let i=0;i<=Math.abs(dr);i++) wsSelecting.push({r:wsStart.r+i*sr,c:wsStart.c+i*sc}); }
+  wsSelecting.forEach(({r,c})=>{ const el=cellAt(r,c); if(el&&!el.classList.contains('found')) el.classList.add('selecting'); });
+}
+
+function checkWSSelection(er,ec) {
+  if(!wsStart) return;
+  const word = wsSelecting.map(({r,c})=>wsGrid[r][c]).join('');
+  const revWord = word.split('').reverse().join('');
+  const found = wsWords.find(w=>w===word||w===revWord);
+  getCells().forEach(cell=>{ if(!cell.classList.contains('found')) cell.classList.remove('selecting'); });
+  if(found && !wsFound.includes(found)) {
+    wsFound.push(found);
+    wsSelecting.forEach(({r,c})=>cellAt(r,c).classList.add('found'));
+    document.getElementById('wsScore').textContent=wsFound.length;
+    renderWordList();
+    speakWord(found.toLowerCase());
+    const fb=document.getElementById('wsFeedback');
+    const v=vocab.find(w=>w.en.toUpperCase()===found);
+    fb.className='feedback correct';
+    fb.textContent=`✓ Found "${found.charAt(0)+found.slice(1).toLowerCase()}"${v?'  -  '+v.bg:''}`;
+    if(wsFound.length===wsWords.length){ fb.textContent='🎉 Amazing! You found all 10 words!'; }
+  }
+  wsStart=null; wsSelecting=[];
+}
+
+function renderWordList() {
+  document.getElementById('wsWordList').innerHTML = wsWords.map(w=>`
+    <span class="word-tag${wsFound.includes(w)?' found-word':''}">${w.charAt(0)+w.slice(1).toLowerCase()}</span>
+  `).join('');
+}
+
+// -- QUIZ ---------------------------------------------------------
+let quizQuestions = [];
+let quizCurrent = 0;
+let quizScore = 0;
+
+function initQuiz() {
+  quizScore=0; quizCurrent=0;
+  document.getElementById('quizScore').textContent=0;
+  document.getElementById('quizResult').style.display='none';
+  document.getElementById('quizContainer').style.display='block';
+
+  const shuffled=[...vocab].sort(()=>Math.random()-0.5);
+  quizQuestions = shuffled.slice(0,10).map(v=>{
+    const type=Math.random()<0.5?'en2bg':'bg2en';
+    const wrongPool=vocab.filter(w=>w.en!==v.en).sort(()=>Math.random()-0.5).slice(0,3);
+    const options=type==='en2bg'
+      ? [...wrongPool.map(w=>w.bg), v.bg].sort(()=>Math.random()-0.5)
+      : [...wrongPool.map(w=>w.en), v.en].sort(()=>Math.random()-0.5);
+    return { v, type, options, correct: type==='en2bg' ? v.bg : v.en };
+  });
+  document.getElementById('quizTotal').textContent=10;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if(quizCurrent>=quizQuestions.length){ showQuizResult(); return; }
+  const q=quizQuestions[quizCurrent];
+  const question = q.type==='en2bg'
+    ? `What is the Bulgarian translation of <b>"${q.v.en}"</b>?`
+    : `Which word means <b>"${q.v.bg}"</b>?`;
+
+  document.getElementById('quizProgress').style.width=`${(quizCurrent/10)*100}%`;
+  document.getElementById('quizContainer').innerHTML=`
+    <div class="exercise-box">
+      <div style="font-size:0.85rem;color:#888;margin-bottom:0.5rem;">Question ${quizCurrent+1} of 10</div>
+      <h3 style="margin-bottom:0.5rem;">${question}</h3>
+      ${q.type==='en2bg'?`<div style="font-size:0.85rem;color:var(--teal);margin-bottom:1rem;">${q.v.pron}  -  <button onclick="speakWord('${q.v.en}')" style="background:none;border:none;cursor:pointer;color:var(--teal);">🔊 Listen</button></div>`:''}
+      <div id="quizOptions">
+        ${q.options.map(opt=>`<button class="choice-btn" onclick="answerQuiz('${opt.replace(/'/g,"\\'")}','${q.correct.replace(/'/g,"\\'")}')">${opt}</button>`).join('')}
+      </div>
+      <div class="feedback" id="quizFeedback"></div>
+    </div>
+  `;
+}
+
+function answerQuiz(chosen, correct) {
+  const fb=document.getElementById('quizFeedback');
+  const btns=document.querySelectorAll('.choice-btn');
+  btns.forEach(b=>b.disabled=true);
+  const q=quizQuestions[quizCurrent];
+  btns.forEach(b=>{
+    if(b.textContent===correct) b.classList.add('correct-choice');
+    else if(b.textContent===chosen && chosen!==correct) b.classList.add('wrong-choice');
+  });
+  if(chosen===correct){
+    quizScore++;
+    document.getElementById('quizScore').textContent=quizScore;
+    fb.className='feedback correct';
+    fb.textContent=`✓ Correct! "${q.v.en}" = "${q.v.bg}"`;
+    speakWord(q.v.en);
+  } else {
+    fb.className='feedback wrong';
+    fb.textContent=`✗ The correct answer is: "${correct}"`;
+  }
+  setTimeout(()=>{ quizCurrent++; renderQuestion(); }, 1500);
+}
+
+function showQuizResult() {
+  document.getElementById('quizContainer').style.display='none';
+  const res=document.getElementById('quizResult');
+  res.style.display='block';
+  const pct=Math.round((quizScore/10)*100);
+  const emoji = pct===100?'🏆':pct>=80?'⭐':pct>=60?'👍':'💪';
+  res.innerHTML=`
+    <div class="result-banner">
+      <div style="font-size:3rem;margin-bottom:0.5rem;">${emoji}</div>
+      <h2>${quizScore} / 10 correct</h2>
+      <p>${pct}%  -  ${pct===100?'Perfect score!':pct>=80?'Excellent work!':pct>=60?'Good effort! Review the ones you missed.':'Keep practicing  -  you can do it!'}</p>
+      <button class="btn btn-gold" style="margin-top:1rem;" onclick="initQuiz()">Try Again</button>
+    </div>
+  `;
+}
+
+// -- SPEAKING TASKS ------------------------------------------------
+const speakingTasks = [
+  {
+    title:"Describe a Famous Person",
+    prompt:"Choose ONE famous person you admire. Describe them using at least 5 vocabulary words from this week. Explain WHY they are famous and what makes them special.",
+    structure:["Start: 'I'd like to talk about...'","Describe: 'They are known for...'","Character: 'One of their key qualities is...'","Conclusion: 'I find them inspiring because...'"],
+    keywords:["ambitious","passionate","resourceful","persistent","courageous"]
+  },
+  {
+    title:"Word Pronunciation Challenge",
+    prompt:"Repeat each word clearly after hearing it. Pay attention to the stress:",
+    isPronunciation: true
+  },
+  {
+    title:"Mini Debate: What Makes Someone Famous?",
+    prompt:"Argue for ONE side: 'Fame is about TALENT' OR 'Fame is about LUCK'. Use vocabulary words to support your argument. Speak for 60 seconds.",
+    structure:["State your position clearly","Give 2-3 supporting points with vocabulary","Use 'I believe...', 'Furthermore...', 'In conclusion...'"],
+    keywords:["accomplished","authentic","diligent","inventive","witty"]
+  },
+];
+
+function buildSpeaking() {
+  const cont = document.getElementById('speakingTasks');
+  cont.innerHTML = speakingTasks.filter(t=>!t.isPronunciation).map((t,i)=>`
+    <div class="speaking-card">
+      <h3>Task ${i+1}: ${t.title}</h3>
+      <div class="prompt">${t.prompt}</div>
+      ${t.structure ? `<div class="tip-box"><b>💡 Structure:</b><br>${t.structure.map(s=>'• '+s).join('<br>')}</div>` : ''}
+      ${t.keywords ? `<div style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:6px;">
+        ${t.keywords.map(k=>`<span style="background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:12px;font-size:0.85rem;cursor:pointer;" onclick="speakWord('${k}')">${k} 🔊</span>`).join('')}
+      </div>` : ''}
+      <button class="mic-btn" id="mic_${i}" onclick="toggleMic(${i})">🎤</button>
+      <div style="font-size:0.85rem;opacity:0.8;" id="mic_status_${i}">Tap to start recording</div>
+      <div id="player_${i}"></div>
+    </div>
+  `).join('');
+
+  // Pronunciation grid
+  const pg = document.getElementById('pronGrid');
+  pg.innerHTML = vocab.slice(0,20).map(v=>`
+    <button onclick="speakWord('${v.en}')" style="background:var(--light);border:1px solid var(--silver);padding:8px 14px;border-radius:20px;cursor:pointer;font-size:0.9rem;font-family:inherit;transition:all 0.2s;" onmouseover="this.style.background='var(--teal)';this.style.color='white'" onmouseout="this.style.background='var(--light)';this.style.color='#222'">
+      ${v.en} <span style="color:#888;font-size:0.78rem;">${v.pron}</span>
+    </button>
+  `).join('');
+}
+
+let isRecording = {};
+
+async function toggleMic(i) {
+  const btn    = document.getElementById(`mic_${i}`);
+  const status = document.getElementById(`mic_status_${i}`);
+  const player = document.getElementById(`player_${i}`);
+
+  if (!isRecording[i]) {
+    // -- START RECORDING --------------------------------------
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const chunks = [];
+      const recorder = new MediaRecorder(stream);
+
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const url  = URL.createObjectURL(blob);
+        player.innerHTML = `
+          <div style="margin-top:10px;">
+            <div style="font-size:0.82rem;opacity:0.75;margin-bottom:4px;">🎧 Your recording  -  listen and compare:</div>
+            <audio controls style="width:100%;max-width:340px;border-radius:8px;">
+              <source src="${url}" type="audio/webm">
+            </audio>
+          </div>`;
+        stream.getTracks().forEach(t => t.stop());
+      };
+
+      recorder.start();
+      window[`recorder_${i}`] = recorder;
+      isRecording[i] = true;
+      btn.classList.add('recording');
+      btn.textContent = '⏹';
+      status.textContent = '🔴 Recording... Tap to stop';
+
+    } catch (err) {
+      status.textContent = '⚠️ Microphone access denied. Please allow microphone in browser settings.';
+    }
+
+  } else {
+    // -- STOP RECORDING ---------------------------------------
+    if (window[`recorder_${i}`] && window[`recorder_${i}`].state !== 'inactive') {
+      window[`recorder_${i}`].stop();
+    }
+    isRecording[i] = false;
+    btn.classList.remove('recording');
+    btn.textContent = '🎤';
+    status.textContent = '✓ Done! Listen to your recording below.';
+  }
+}
+
+function stopMic(i, btn, status) {
+  isRecording[i] = false;
+  if (btn)    { btn.classList.remove('recording'); btn.textContent = '🎤'; }
+  if (status) { status.textContent = '✓ Done!'; }
+}
+
+// -- WRITING TASKS ------------------------------------------------
+const writingTasks = [
+  {
+    title:"Paragraph about a famous person",
+    instruction:"Write 5-8 sentences describing a famous person you admire. Use at least 6 vocabulary words from the list below. The keyword tracker will show which words you have used.",
+    placeholder:"My favourite famous person is... They are known for... I admire them because...",
+    keywords:["adaptable","ambitious","compassionate","diligent","genuine","passionate","persistent","reliable"]
+  },
+  {
+    title:"Email to an inspiring teacher",
+    instruction:"Write a short email (80-100 words) to a teacher who inspired you. Use at least 4 vocabulary words. Start with 'Dear...' and finish formally.",
+    placeholder:"Dear ...,\n\nI am writing to express...",
+    keywords:["empathetic","sincere","generous","attentive","witty","frank","sensible"]
+  },
+  {
+    title:"What makes a great teacher? (Opinion paragraph)",
+    instruction:"Write your opinion (60-80 words): What character qualities make a great teacher? Use at least 5 vocabulary words and give examples.",
+    placeholder:"In my opinion, a great teacher should be...",
+    keywords:["patient","resourceful","inventive","practical","empathetic","broad-minded","authentic","compassionate"]
+  },
+];
+
+function buildWriting() {
+  const cont = document.getElementById('writingTasks');
+  cont.innerHTML = writingTasks.map((t,i)=>`
+    <div class="writing-box">
+      <h3>Task ${i+1}: ${t.title}</h3>
+      <p>${t.instruction}</p>
+      <textarea id="writing_${i}" placeholder="${t.placeholder}" oninput="trackKeywords(${i})"></textarea>
+      <div class="word-counter" id="wc_${i}">0 words</div>
+      <div style="margin-top:8px;font-size:0.88rem;color:#666;font-weight:600;">Keywords used:</div>
+      <div class="keyword-check" id="kw_${i}">
+        ${t.keywords.map(k=>`<span class="keyword-tag" id="kw_${i}_${k.replace(/[^a-z]/g,'_')}">${k}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function trackKeywords(i) {
+  const text = document.getElementById(`writing_${i}`).value.toLowerCase();
+  const words = text.split(/\W+/);
+  const wc = text.trim()==='' ? 0 : text.trim().split(/\s+/).length;
+  document.getElementById(`wc_${i}`).textContent = `${wc} words`;
+
+  writingTasks[i].keywords.forEach(k=>{
+    const el=document.getElementById(`kw_${i}_${k.replace(/[^a-z]/g,'_')}`);
+    if(!el) return;
+    const used = words.includes(k) || words.includes(k.replace('-',''));
+    el.classList.toggle('used', used);
+  });
+}
+
+// -- READING ------------------------------------------------------
+var rdgQs = [
+  {q:"Social media has made it easier to become famous overnight.", a:"T"},
+  {q:"Truly accomplished celebrities always achieve fame without hard work.", a:"F"},
+  {q:"Audiences tend to admire celebrities who appear authentic and sincere.", a:"T"},
+  {q:"Most celebrities use their fame to support charitable causes.", a:"NG"},
+  {q:"The loss of privacy is one of the challenges of being famous.", a:"NG"},
+  {q:"Assertive celebrities are always more successful than empathetic ones.", a:"F"}
+];
+var rdgFill = [
+  {q:"She never gives up. Her ___ attitude got her to the top.", a:"persistent"},
+  {q:"He used his ___ nature to connect with fans in difficult times.", a:"empathetic"},
+  {q:"An ___ person is true to their values even under pressure.", a:"authentic"},
+  {q:"She is ___. She always finds a creative solution to any problem.", a:"resourceful"},
+  {q:"His ___ goals pushed him to work harder than anyone else.", a:"ambitious"},
+  {q:"A ___ teacher accepts students from all backgrounds.", a:"broad-minded"},
+  {q:"Her ___ thanks after the award ceremony moved the audience.", a:"sincere"},
+  {q:"By 30 she was an ___ pianist, performing worldwide.", a:"accomplished"}
+];
+var rdgOpts = ["authentic","ambitious","empathetic","sincere","resourceful","persistent","accomplished","broad-minded"];
+
+function buildReading() {
+  var c1 = document.getElementById("rdg_t1");
+  var c2 = document.getElementById("rdg_t2");
+  if (!c1 || !c2) return;
+
+  var h1 = "";
+  var lb = ["True","False","Not Given"];
+  var vl = ["T","F","NG"];
+  for (var i=0; i<rdgQs.length; i++) {
+    h1 += "<div style='margin-bottom:1rem;padding-bottom:0.8rem;border-bottom:1px solid #eee'>";
+    h1 += "<p style='font-weight:600;margin-bottom:0.4rem'>"+(i+1)+". "+rdgQs[i].q+"</p>";
+    for (var j=0; j<3; j++) {
+      h1 += "<button id='rdgb_"+i+"_"+vl[j]+"' data-qi='"+i+"' data-vl='"+vl[j]+"' onclick='rdgSel(this)' style='margin:3px 6px 3px 0;padding:5px 14px;border-radius:18px;border:2px solid #ccc;background:#fff;cursor:pointer;font-size:0.92rem'>"+lb[j]+"</button>";
+    }
+    h1 += "</div>";
+  }
+  c1.innerHTML = h1;
+
+  var optHtml = "<option value=''>-- choose --</option>";
+  for (var k=0; k<rdgOpts.length; k++) {
+    optHtml += "<option value='"+rdgOpts[k]+"'>"+rdgOpts[k]+"</option>";
+  }
+  var h2 = "";
+  for (var i=0; i<rdgFill.length; i++) {
+    var sel = "<select id='rdf_"+i+"' style='border:2px solid #ccc;border-radius:8px;padding:4px 8px;font-size:0.95rem;background:#fff;cursor:pointer'>"+optHtml+"</select>";
+    h2 += "<div style='margin-bottom:0.9rem;padding-bottom:0.8rem;border-bottom:1px solid #eee'>";
+    h2 += "<p style='margin:0'>"+(i+1)+". "+rdgFill[i].q.replace("___", sel)+"</p>";
+    h2 += "</div>";
+  }
+  c2.innerHTML = h2;
+}
+
+function rdgSel(btn) {
+  var qi = btn.getAttribute("data-qi");
+  var val = btn.getAttribute("data-vl");
+  var vl = ["T","F","NG"];
+  for (var j=0; j<3; j++) {
+    var b = document.getElementById("rdgb_"+qi+"_"+vl[j]);
+    if (!b) continue;
+    if (vl[j] === val) {
+      b.style.background="#1E3A5F"; b.style.color="#fff"; b.style.border="2px solid #1E3A5F";
+      b.setAttribute("data-sel","1");
+    } else {
+      b.style.background="#fff"; b.style.color="#222"; b.style.border="2px solid #ccc";
+      b.removeAttribute("data-sel");
+    }
+  }
+}
+
+function rdgCheck() {
+  var score=0;
+  for (var i=0; i<rdgQs.length; i++) {
+    var keys = ['T','F','NG'];
+    for (var j=0; j<keys.length; j++) {
+      var b = document.getElementById('rdgb_'+i+'_'+keys[j]);
+      if (!b) continue;
+      if (b.getAttribute('data-sel')==='1') {
+        if (keys[j]===rdgQs[i].a) { b.style.background='#1A7A4A'; b.style.borderColor='#1A7A4A'; score++; }
+        else { b.style.background='#C0392B'; b.style.borderColor='#C0392B'; }
+      } else if (keys[j]===rdgQs[i].a) {
+        b.style.border='3px solid #1A7A4A';
+      }
+    }
+  }
+  var r=document.getElementById('rdg_result');
+  r.style.color=score===rdgQs.length?'#1A7A4A':'#C0392B';
+  r.innerHTML='Score: '+score+'/'+rdgQs.length+(score===rdgQs.length?' - Perfect!':' - Green border = correct answer.');
+}
+
+function rdgReset() {
+  for (var i=0; i<rdgQs.length; i++) {
+    var keys=['T','F','NG'];
+    for (var j=0; j<keys.length; j++) {
+      var b=document.getElementById('rdgb_'+i+'_'+keys[j]);
+      if(b){b.style.background='#fff';b.style.color='#222';b.style.border='2px solid #ccc';b.removeAttribute('data-sel');}
+    }
+  }
+  var r=document.getElementById('rdg_result'); r.innerHTML=''; r.style.color='';
+}
+
+function rdgCheck2() {
+  var score=0;
+  for (var i=0; i<rdgFill.length; i++) {
+    var s=document.getElementById('rdf_'+i); if(!s) continue;
+    if (s.value===rdgFill[i].a) { s.style.border='2px solid #1A7A4A'; s.style.background='#d4edda'; score++; }
+    else { s.style.border='2px solid #C0392B'; s.style.background='#f8d7da'; }
+  }
+  var r=document.getElementById('rdg_result2');
+  r.style.color=score===rdgFill.length?'#1A7A4A':'#C0392B';
+  r.innerHTML='Score: '+score+'/'+rdgFill.length+(score===rdgFill.length?' - Perfect!':' - Red = wrong, green = correct.');
+}
+
+function rdgReset2() {
+  for (var i=0; i<rdgFill.length; i++) {
+    var s=document.getElementById('rdf_'+i);
+    if(s){s.value='';s.style.border='2px solid #ccc';s.style.background='#fff';}
+  }
+  var r=document.getElementById('rdg_result2'); r.innerHTML=''; r.style.color='';
+}
+
+// -- INIT ---------------------------------------------------------
+buildReading();
+buildVocabGrid();
+updateFlashcard();
+initMatching();
+initDiscover();
+buildFill();
+initWordSearch();
+initQuiz();
+buildSpeaking();
+buildWriting();
+
+document.addEventListener('mouseup',()=>{ if(wsDragging){ wsDragging=false; } });
+</script>
+</body>
+</html>
